@@ -297,3 +297,67 @@ function clearHistory() {
 
   document.getElementById("historyList").innerHTML = "";
 }
+
+
+function openCompare() {
+  window.location.href = "compare.html";
+}
+
+function downloadAs() {
+
+  const format = document.getElementById("downloadFormat").value;
+  const json = JSON.parse(editor.getValue());
+
+  if (format === "json") {
+    downloadFile(JSON.stringify(json, null, 4), "data.json", "application/json");
+  }
+
+  else if (format === "csv") {
+    const csv = jsonToCSV(json);
+    downloadFile(csv, "data.csv", "text/csv");
+  }
+
+  else if (format === "yaml") {
+    const yaml = jsonToYAML(json);
+    downloadFile(yaml, "data.yaml", "text/plain");
+  }
+}
+
+function downloadFile(content, name, type) {
+  const blob = new Blob([content], { type });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+}
+
+function jsonToCSV(json) {
+
+  if (!Array.isArray(json)) return "CSV works with array of objects";
+
+  const headers = Object.keys(json[0]);
+
+  const rows = json.map(obj =>
+    headers.map(h => `"${obj[h] ?? ""}"`).join(",")
+  );
+
+  return headers.join(",") + "\n" + rows.join("\n");
+}
+
+function jsonToYAML(obj, indent = 0) {
+
+  let yaml = "";
+  const space = "  ".repeat(indent);
+
+  for (let key in obj) {
+
+    if (typeof obj[key] === "object" && obj[key] !== null) {
+      yaml += `${space}${key}:\n` + jsonToYAML(obj[key], indent + 1);
+    }
+    else {
+      yaml += `${space}${key}: ${obj[key]}\n`;
+    }
+  }
+  return yaml;
+}
+

@@ -17,6 +17,14 @@
     <button onclick="downloadJSON()">Download</button>
     <button onclick="toggleTheme()">Toggle Theme</button>
     <button onclick="openHistory()">History</button>
+    <button onclick="openCompare()">JSON Compare</button>
+    <select id="downloadFormat">
+      <option value="json">Download JSON</option>
+      <option value="csv">Download CSV</option>
+      <option value="yaml">Download YAML</option>
+    </select>
+
+    <button onclick="downloadAs()">Download</button>
 
 
     <div id="alertBox" class="alertBox" style="display:none"></div>

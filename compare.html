@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>JSON Compare</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="toolbar">
+    <button onclick="goBack()">Back</button>
+    <button onclick="formatBoth()">Prettify Both</button>
+  </div>
+
+  <div id="diffEditor" style="height: calc(100vh - 60px);"></div>
+
+  <script src="https://unpkg.com/monaco-editor@latest/min/vs/loader.js"></script>
+  <script src="compare.js"></script>
+
+</body>
+
+</html>
