@@ -3,35 +3,44 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>JSON Formatter Pro</title>
+  <title>JSON PlayGround</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
 
 <body>
 
   <div class="toolbar">
-    <button onclick="validateJSON()">Validate</button>
-    <button onclick="prettifyJSON()">Prettify</button>
-    <button onclick="minifyJSON()">Minify</button>
-    <button onclick="copyJSON()">Copy</button>
-    <button onclick="downloadJSON()">Download</button>
-    <button onclick="toggleTheme()">Toggle Theme</button>
-    <button onclick="openHistory()">History</button>
-    <button onclick="openCompare()">JSON Compare</button>
-    <select id="downloadFormat">
-      <option value="json">Download JSON</option>
-      <option value="csv">Download CSV</option>
-      <option value="yaml">Download YAML</option>
-    </select>
 
-    <button onclick="downloadAs()">Download</button>
+    <div class="toolbar-left">
+      <button onclick="validateJSON()">Validate</button>
+      <button onclick="prettifyJSON()">Beautify</button>
+      <button onclick="minifyJSON()">Minify</button>
+      <button onclick="openHistory()">History</button>
+      <button onclick="openCompare()">Compare</button>
+      <button onclick="stringifyJSON()">Stringify</button>
+      <button onclick="parseStringified()">JSON Parse String</button>
+    </div>
 
+    <div class="toolbar-center">
+      <div id="alertBox" class="alertBox" style="display:none"></div>
+    </div>
 
-    <div id="alertBox" class="alertBox" style="display:none"></div>
+    <div class="toolbar-right">
+      <button class="iconBtn" onclick="downloadJSON()">⬇</button>
+      <button class="iconBtn" onclick="toggleTheme()">🌙</button>
+    </div>
+
   </div>
 
+
   <div class="workspace">
-    <div id="editor"></div>
+
+    <div class="editorWrapper">
+      <button class="copyIcon" onclick="copyJSON()">📋</button>
+      <div id="editor"></div>
+    </div>
+
     <div class="treePanel">
       <div class="treeHeader">
         JSON Explorer
@@ -39,11 +48,11 @@
       </div>
       <div id="treeView"></div>
     </div>
+
     <div class="historyPanel">
       <div class="historyHeader">
         History
         <button onclick="clearHistory()">Clear</button>
-
         <button onclick="toggleHistory()">Close</button>
       </div>
       <div id="historyList"></div>

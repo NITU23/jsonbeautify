@@ -1,55 +1,75 @@
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #1e1e1e;
-  color: white;
+  font-family: Consolas, monospace;
+  background: #000;
+  color: #00FF66;
 }
 
+/* toolbar */
 .toolbar {
-  padding: 10px;
-  background: #2d2d2d;
+  padding: 10px 14px;
+  background: #111;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toolbar-left button {
+  margin-right: 8px;
+}
+
+.toolbar-right {
   display: flex;
   gap: 10px;
 }
 
-button {
-  padding: 8px 14px;
-  border: none;
-  cursor: pointer;
+.iconBtn {
+  font-size: 18px;
+  padding: 6px 10px;
   border-radius: 6px;
+  background: #111;
+  color: #00FF66;
 }
 
-#editor {
-  height: calc(100vh - 60px);
-}
-
-.alertBox {
-  margin-left: auto;
-  padding: 6px 12px;
-  border-radius: 6px;
-}
-
-.alert-success {
-  background: #1f7a1f;
-}
-
-.alert-error {
-  background: #a11;
-}
-
+/* workspace */
 .workspace {
   display: flex;
   height: calc(100vh - 60px);
 }
 
-#editor {
+/* editor */
+.editorWrapper {
+  position: relative;
   flex: 3;
 }
 
+#editor {
+  height: 100%;
+}
+
+/* copy icon */
+.copyIcon {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  background: #111;
+  color: #00FF66;
+  border: none;
+  border-radius: 6px;
+  padding: 6px;
+  cursor: pointer;
+}
+
+.copyIcon:hover {
+  background: #222;
+}
+
+/* tree panel */
 .treePanel {
   flex: 1;
-  background: #252526;
-  border-left: 1px solid #444;
+  background: #050505;
+  border-left: 1px solid #003300;
   overflow: auto;
   padding: 10px;
 }
@@ -63,15 +83,14 @@ button {
 
 .node {
   margin-left: 16px;
-  font-family: monospace;
 }
 
 .key {
-  color: #c586c0;
+  color: #33FF99;
 }
 
 .value {
-  color: #4ec9b0;
+  color: #00FF66;
 }
 
 .toggle {
@@ -79,28 +98,15 @@ button {
   margin-right: 6px;
 }
 
-body.light {
-  background: #ffffff;
-  color: #111;
-}
-
-body.light .toolbar {
-  background: #f0f0f0;
-}
-
-body.light .treePanel {
-  background: #fafafa;
-  border-left: 1px solid #ccc;
-}
-
+/* history panel */
 .historyPanel {
   position: fixed;
   right: 0;
   top: 60px;
   width: 320px;
   height: calc(100vh - 60px);
-  background: #1f1f1f;
-  border-left: 1px solid #444;
+  background: #050505;
+  border-left: 1px solid #003300;
   padding: 10px;
   overflow: auto;
   display: none;
@@ -116,25 +122,72 @@ body.light .treePanel {
 
 .historyItem {
   padding: 8px;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid #003300;
   cursor: pointer;
-  font-family: monospace;
 }
 
 .historyItem:hover {
-  background: #2a2a2a;
+  background: #001a00;
 }
 
-body {
-  background: #000;
-  color: #00FF66;
-  font-family: Consolas, monospace;
+/* alerts */
+.alertBox {
+
+  padding: 6px 12px;
+  border-radius: 6px;
 }
 
+.alert-success {
+  background: #004d00;
+}
+
+.alert-error {
+  background: #330000;
+}
+
+/* monaco glow */
 .monaco-editor .view-lines {
   text-shadow: 0 0 2px rgba(0, 255, 102, 0.35);
 }
 
 .monaco-editor .cursor {
   box-shadow: 0 0 4px rgba(0, 255, 102, 0.6);
+}
+
+.toolbar {
+  padding: 10px 14px;
+  background: #111;
+  display: flex;
+  align-items: center;
+}
+
+.toolbar-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.toolbar-right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+
+.alertBox {
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.alertBox {
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-align: center;
+  transition: opacity 0.4s ease;
+}
+
+.alertBox.show {
+  opacity: 1;
 }

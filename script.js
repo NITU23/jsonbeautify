@@ -361,3 +361,28 @@ function jsonToYAML(obj, indent = 0) {
   return yaml;
 }
 
+function stringifyJSON() {
+
+  try {
+    const json = JSON.parse(editor.getValue());
+
+    const str = JSON.stringify(JSON.stringify(json));
+
+    editor.setValue(str);
+
+    showAlert("JSON stringified ✔", true);
+
+  } catch (e) {
+    showAlert("Invalid JSON ❌ : " + e.message, false);
+  }
+}
+function parseStringified() {
+  try {
+    const parsed = JSON.parse(JSON.parse(editor.getValue()));
+    editor.setValue(JSON.stringify(parsed, null, 4));
+    showAlert("String parsed ✔", true);
+  } catch (e) {
+    showAlert("Invalid stringified JSON ❌", false);
+  }
+}
+
