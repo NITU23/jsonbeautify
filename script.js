@@ -58,18 +58,6 @@ require(['vs/editor/editor.main'], function () {
 
 /* actions */
 
-function validateJSON() {
-  const alertBox = document.getElementById("alertBox");
-  try {
-    JSON.parse(editor.getValue());
-    alertBox.className = "alertBox alert-success";
-    alertBox.innerText = "JSON is valid ✔";
-  } catch (e) {
-    alertBox.className = "alertBox alert-error";
-    alertBox.innerText = "Invalid JSON ❌ : " + e.message;
-  }
-  alertBox.style.display = "block";
-}
 
 function prettifyJSON() {
   const formatted = JSON.stringify(
@@ -201,27 +189,62 @@ function toggleTheme() {
 }
 
 function validateJSON() {
+
   const alertBox = document.getElementById("alertBox");
+  const jsonText = editor.getValue();
 
   try {
-    const json = editor.getValue();
-    JSON.parse(json);
 
-    saveToHistory(json);
+    JSON.parse(jsonText);
 
+    alertBox.style.display = "block";
     alertBox.className = "alertBox alert-success";
-    alertBox.innerText = "JSON is valid ✔";
+    alertBox.innerHTML = `
+      <div>JSON is valid ✔</div>
+      <div id="suggestionArea"></div>
+    `;
 
   } catch (e) {
+
+    const suggestion = getSuggestion(e.message);
+
+    alertBox.style.display = "block";
     alertBox.className = "alertBox alert-error";
-    alertBox.innerText = "Invalid JSON ❌ : " + e.message;
+
+    alertBox.innerHTML = `
+      <div>
+        <strong>Invalid JSON ❌</strong><br>
+        ${e.message}
+      </div>
+      <div id="suggestionArea"></div>
+    `;
+
+    if (suggestion) {
+
+      const suggestionArea = document.getElementById("suggestionArea");
+
+      suggestionArea.innerHTML = `
+        <div class="suggestionBox">
+          💡 Suggestion: ${suggestion.label}
+          <div class="suggestionActions">
+            <button id="acceptFix">✔ Accept</button>
+            <button id="rejectFix">✖ Reject</button>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("acceptFix").onclick = () => {
+        applyFix(suggestion);
+        suggestionArea.innerHTML = "";
+        validateJSON(); // re-check
+      };
+
+      document.getElementById("rejectFix").onclick = () => {
+        suggestionArea.innerHTML = "";
+      };
+    }
   }
-
-  alertBox.style.display = "block";
 }
-
-
-
 
 function saveToHistory(json) {
 
@@ -386,3 +409,20 @@ function parseStringified() {
   }
 }
 
+function getSuggestion(errorMessage) {
+
+  if (errorMessage.includes("Unexpected token")) {
+    return {
+      label: "Remove trailing comma",
+      action: (text) =>
+        text.replace(/,\s*([}\]])/g, "$1")
+    };
+  }
+
+  return null;
+}
+
+function applyFix(suggestion) {
+  const current = editor.getValue();
+  editor.setValue(suggestion.action(current));
+}
