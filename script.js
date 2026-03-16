@@ -60,15 +60,54 @@ require(['vs/editor/editor.main'], function () {
 
 function validateJSON() {
   const alertBox = document.getElementById("alertBox");
+  const jsonText = editor.getValue();
+
   try {
-    JSON.parse(editor.getValue());
+    JSON.parse(jsonText);
+
+    alertBox.style.display = "block";
     alertBox.className = "alertBox alert-success";
-    alertBox.innerText = "JSON is valid ✔";
+    alertBox.innerHTML = "JSON is valid ✔";
+
   } catch (e) {
+
+    const suggestion = getSuggestion(jsonText, e.message);
+
+    alertBox.style.display = "block";
     alertBox.className = "alertBox alert-error";
-    alertBox.innerText = "Invalid JSON ❌ : " + e.message;
+
+    if (suggestion) {
+
+      alertBox.innerHTML = `
+        <div>
+          <strong>Invalid JSON  re ❌</strong><br>
+          ${e.message}
+        </div>
+
+        <div class="suggestionBox">
+          💡 Suggestion: ${suggestion.label}
+          <div class="suggestionActions">
+            <button id="acceptFix">✔ Accept</button>
+            <button id="rejectFix">✖ Reject</button>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("acceptFix").onclick = () => {
+        applyFix(suggestion);
+        validateJSON();
+      };
+
+      document.getElementById("rejectFix").onclick = () => {
+        alertBox.style.display = "none";
+      };
+
+    } else {
+      alertBox.innerHTML = `
+        Invalid JSON  re ❌ : ${e.message}
+      `;
+    }
   }
-  alertBox.style.display = "block";
 }
 
 function prettifyJSON() {
@@ -214,7 +253,7 @@ function validateJSON() {
 
   } catch (e) {
     alertBox.className = "alertBox alert-error";
-    alertBox.innerText = "Invalid JSON ❌ : " + e.message;
+    alertBox.innerText = "Invalid JSON  re ❌ : " + e.message;
   }
 
   alertBox.style.display = "block";
@@ -373,7 +412,7 @@ function stringifyJSON() {
     showAlert("JSON stringified ✔", true);
 
   } catch (e) {
-    showAlert("Invalid JSON ❌ : " + e.message, false);
+    showAlert("Invalid JSON  re ❌ : " + e.message, false);
   }
 }
 function parseStringified() {
@@ -384,5 +423,14 @@ function parseStringified() {
   } catch (e) {
     showAlert("Invalid stringified JSON ❌", false);
   }
+}
+
+function getSuggestion(jsonText, errorMessage) {
+  return null; // temporary safe fallback
+}
+
+function applyFix(suggestion) {
+  const current = editor.getValue();
+  editor.setValue(suggestion.action(current));
 }
 
